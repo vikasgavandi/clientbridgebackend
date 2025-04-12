@@ -26,7 +26,7 @@ const handleQueryError = (err, res) => {
 
 // Default Route
 app.get('/', (req, res) => {
-  res.send('Hello, World!', 'Bakcne sAPI is up and running');
+  res.status(200).send('Hello, World!', 'Bakcne sAPI is up and running');
 });
 
 // Login Route
