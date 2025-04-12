@@ -1,0 +1,13 @@
+// scrollable cards - complete
+// search - complete
+
+
+frontend 
+
+UI refine 
+cards details 
+
+
+backend 
+company clients total - api 
+
