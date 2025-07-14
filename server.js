@@ -1,6 +1,8 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const pool = require('./config');
 const morgan = require('morgan');
 const helmet = require('helmet');
@@ -11,8 +13,11 @@ const app = express();
 
 // Middleware
 app.use(express.json());
+app.use(express.static('public'));
 app.use(cors({
-  origin: 'https://vikasgavandi.github.io'
+  origin: ['https://vikasgavandi.github.io', 'http://127.0.0.1:5500', 'http://localhost:2300'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 app.use(morgan('combined'));
@@ -24,9 +29,41 @@ const handleQueryError = (err, res) => {
   res.status(500).json({ error: 'Database query failed', details: err.message });
 };
 
-// Default Route
+// Default Route - redirect to login
 app.get('/', (req, res) => {
-  res.status(200).send('Hello, World!');
+  res.redirect('/login.html');
+});
+
+// Register Route
+app.post('/register', async (req, res) => {
+  const { name, username, email, password, role = 'user' } = req.body;
+
+  if (!name || !username || !email || !password) {
+    return res.status(400).json({ error: 'All fields are required' });
+  }
+
+  try {
+    const [existing] = await pool.query('SELECT * FROM login WHERE username = ? OR email = ?', [username, email]);
+    
+    if (existing.length > 0) {
+      return res.status(409).json({ error: 'Username or email already exists' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    
+    const [result] = await pool.query(
+      'INSERT INTO login (name, username, email, password, role) VALUES (?, ?, ?, ?, ?)',
+      [name, username, email, hashedPassword, role]
+    );
+
+    res.status(201).json({ 
+      message: 'User registered successfully',
+      userId: result.insertId 
+    });
+  } catch (err) {
+    console.error('Registration error:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
 });
 
 // Login Route
