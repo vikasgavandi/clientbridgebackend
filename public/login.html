@@ -212,11 +212,11 @@
                     ok: true,
                     json: () => Promise.resolve({
                         token: 'demo-token',
-                        user: { id: 1, name: username === 'admin' ? 'Admin User' : 'Demo User', username, role: username === 'admin' ? 'admin' : 'user' }
+                        user: { id: 1, name: username === 'admin' ? 'Admin User' : 'Demo User', username: username, role: username === 'admin' ? 'admin' : 'user' }
                     })
                 };
                 
-                const response = mockResponse; // await fetch('/.netlify/functions/login', {
+                const response = mockResponse;
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
