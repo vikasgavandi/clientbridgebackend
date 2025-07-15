@@ -530,7 +530,7 @@
         async function loadCompaniesData() {
             try {
                 const token = localStorage.getItem('token');
-                const response = await fetch('/api/compdata', {
+                const response = await fetch('/.netlify/functions/compdata', {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -565,7 +565,7 @@
         async function loadClientData() {
             try {
                 const token = localStorage.getItem('token');
-                const response = await fetch('/clientdata', {
+                const response = await fetch('/.netlify/functions/clientdata', {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }

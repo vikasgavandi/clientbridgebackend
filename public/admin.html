@@ -441,7 +441,7 @@
         async function loadClientData() {
             try {
                 const token = localStorage.getItem('token');
-                const response = await fetch('/admin/data?role=admin', {
+                const response = await fetch('/.netlify/functions/admin?role=admin', {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -523,7 +523,7 @@
 
             try {
                 const token = localStorage.getItem('token');
-                const url = currentEditId ? `/admin/data/${currentEditId}?role=admin` : '/admin/data?role=admin';
+                const url = currentEditId ? `/.netlify/functions/admin?role=admin&id=${currentEditId}` : '/.netlify/functions/admin?role=admin';
                 const method = currentEditId ? 'PUT' : 'POST';
                 
                 const response = await fetch(url, {
@@ -552,7 +552,7 @@
 
             try {
                 const token = localStorage.getItem('token');
-                const response = await fetch(`/admin/data/${id}?role=admin`, {
+                const response = await fetch(`/.netlify/functions/admin?role=admin&id=${id}`, {
                     method: 'DELETE',
                     headers: {
                         'Authorization': `Bearer ${token}`
