@@ -207,7 +207,16 @@
             loading.style.display = 'block';
             
             try {
-                const response = await fetch('/.netlify/functions/login', {
+                // Temporary mock login for demo
+                const mockResponse = {
+                    ok: true,
+                    json: () => Promise.resolve({
+                        token: 'demo-token',
+                        user: { id: 1, name: username === 'admin' ? 'Admin User' : 'Demo User', username, role: username === 'admin' ? 'admin' : 'user' }
+                    })
+                };
+                
+                const response = mockResponse; // await fetch('/.netlify/functions/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
